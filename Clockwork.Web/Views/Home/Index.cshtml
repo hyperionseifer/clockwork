@@ -11,29 +11,30 @@
   <div class="row">
     <div class="col-md-8">
       <div class="table-container">
-        <table class="table table-hover">
+        <div class="loader hidden" data-bind="css: { 'hidden': (!vm.queryList.loading()) }"></div>
+        <table class="table table-hover" data-bind="css: { 'hidden': vm.queryList.loading }">
           <thead>
-            <tr>
-              <th>UTC</th>
-              <th>Timezone</th>
-              <th>Time</th>
-              <th>Client IP Address</th>
-            </tr>
+          <tr>
+            <th>UTC</th>
+            <th>Timezone</th>
+            <th>Time</th>
+            <th>Client IP Address</th>
+          </tr>
           </thead>
           <tbody>
-            <!-- ko foreach: vm.queryList -->
-            <tr>
-              <td data-bind="text: utcTime.text"></td>
-              <td data-bind="text: timezone"></td>
-              <td data-bind="text: time.text"></td>
-              <td data-bind="text: clientIp"></td>
-            </tr>
-            <!-- /ko -->
-            <tr>
-              <td colspan="4">
-                <a data-bind="click: vm.loadNextQueryList">Load more...</a>
-              </td>
-            </tr>
+          <!-- ko foreach: vm.queryList -->
+          <tr>
+            <td data-bind="text: utcTime.text"></td>
+            <td data-bind="text: timezone"></td>
+            <td data-bind="text: time.text"></td>
+            <td data-bind="text: clientIp"></td>
+          </tr>
+          <!-- /ko -->
+          <tr>
+            <td colspan="4">
+              <a data-bind="click: vm.loadNextQueryList">Load more...</a>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>

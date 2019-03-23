@@ -39,7 +39,9 @@
             response.length > 0)
           self.queryList.page(page); // if successful, update current page stamped into the client
       }
-      self.queryList.loading(false);
+      setTimeout(function() {
+        self.queryList.loading(false);  
+      }, 1500);
     }).fail(function() {
       self.queryList.loading(false);
     });
@@ -68,7 +70,9 @@
         self.queryList.page(0); // set page to 0
         self.loadNextQueryList(); // reload first page
       }
-      self.requesting(false);
+      setTimeout(function() {
+        self.requesting(false);
+      }, 1500);
     }).fail(function() {
       self.requesting(false);
     });
