@@ -1,0 +1,59 @@
+﻿body {
+  padding-top: 50px;
+}
+
+a {
+  cursor: pointer;  
+}
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.btn.btn-primary {
+  float: right;
+}
+
+.entry-column {
+  background: #e6e6e6;
+  padding: 2em;
+  padding-bottom: 4em;
+}
+
+.table-container {
+  margin-bottom: 1em;  
+}
+
+.form-group h4 {
+  margin-left: .75em;  
+}
+
+.callout {
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+  border-left-color: #1b809e;
+  background: #fff;
+  border-radius: 5px;
+  margin-top: 5em;
+}
+
+.callout h4 {
+  color: #1b809e;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.callout p:last-child {
+  margin-bottom: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .table-container {
+    max-height: 420px;
+    overflow-y: auto;
+  }
+}

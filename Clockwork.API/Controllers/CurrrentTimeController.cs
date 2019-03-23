@@ -20,30 +20,42 @@ namespace Clockwork.API.Controllers
       // GET api/currenttime
       [Route("api/[controller]")]
       [HttpGet]
-      public IActionResult Get()
+      public IActionResult GetTime([FromQuery] string timezoneId)
       {
+        var timezone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+        if (timezone == null)
+          timezone = TimeZoneInfo.Utc;
+
         var utcTime = DateTime.UtcNow;
-        var serverTime = DateTime.Now;
+        var timezoneTime = TimeZoneInfo.ConvertTime(utcTime, TimeZoneInfo.Utc, timezone);
         var remoteIp = HttpContext.Connection.RemoteIpAddress.ToString();
 
         var currentTimeDetail = new CurrentTimeQuery
         {
-            UTCTime = utcTime,
-            ClientIp = remoteIp,
-            Time = serverTime
+          UTCTime = utcTime,
+          ClientIp = remoteIp,
+          Time = timezoneTime,
+          TimezoneId = timezone.Id,
+          Timezone = timezone.DisplayName
         };
 
         _context.CurrentTimeQueries.Add(currentTimeDetail);
         _context.SaveChanges();
 
         return Ok(currentTimeDetail);
-      }
+    }
 
-    [Route("api/[controller]/getall")]
+    [Route("api/[controller]/[action]")]
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> QueryList([FromQuery] int? page)
     {
-      var items = await _context.CurrentTimeQueries.OrderByDescending(q => q.CurrentTimeQueryId).ToListAsync();
+      var top = 20; // 20 records per page
+      var skip = ((page ?? 1) - 1) * top; 
+      var items = await _context.CurrentTimeQueries
+                                .OrderByDescending(q => q.CurrentTimeQueryId)
+                                .Skip(skip)
+                                .Take(top)
+                                .ToListAsync();
       return Ok(items);
     }
   }

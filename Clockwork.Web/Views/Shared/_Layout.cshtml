@@ -1,10 +1,29 @@
-﻿<!DOCTYPE html>
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewBag.Title</title>
-    <meta charset="utf-8" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@ViewBag.Title</title>
+  @Styles.Render("~/content/base")
+  @RenderSection("styles", false);
+  <!--[if lt IE 9]>
+    @Scripts.Render("~/js/ie8below")
+  <![endif]-->
+  @Scripts.Render("~/js/emulation")
 </head>
 <body>
-	@RenderBody()
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">@ViewBag.Title</a>
+    </div>
+  </div>
+</nav>
+  @RenderBody()
+  @Scripts.Render("~/js/base")
+  @RenderSection("scripts", false)
+  @Scripts.Render("~/js/app.start")
 </body>
 </html>

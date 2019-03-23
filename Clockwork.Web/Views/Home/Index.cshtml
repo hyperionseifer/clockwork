@@ -1,21 +1,86 @@
-﻿<script>
-function UserAction() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("output").innerHTML = this.responseText;
-        }
-    };
-    xhttp.open("GET", "http://localhost/ClockworkApi/api/currenttime", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send();
-
+﻿@model Clockwork.Web.ViewModels.HomeViewModel
+@{
+  ViewBag.Title = "Clockwork";
+  if (Model != null)
+  {
+    ViewBag.Title = string.Format("AWH Clockwork Project {0} on {1}!", Model.Version, Model.Runtime);
+  }
 }
-</script>
 
-<h2>AWH Clockwork Project @ViewData["Version"] on @ViewData["Runtime"]!</h2>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="table-container">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>UTC</th>
+              <th>Timezone</th>
+              <th>Time</th>
+              <th>Client IP Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ko foreach: vm.queryList -->
+            <tr>
+              <td data-bind="text: utcTime.text"></td>
+              <td data-bind="text: timezone"></td>
+              <td data-bind="text: time.text"></td>
+              <td data-bind="text: clientIp"></td>
+            </tr>
+            <!-- /ko -->
+            <tr>
+              <td colspan="4">
+                <a data-bind="click: vm.loadNextQueryList">Load more...</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-4 entry-column">
+      <div class="form-horizontal">
+        <div class="form-group">
+          <h4>Get Current Time</h4>
+          <label class="col-sm-2 control-label">Timezone</label>
+          <div class="col-sm-10">
+            <select class="form-control">
+              @if (Model != null &&
+                   Model.Timezones != null &&
+                   Model.Timezones.Any())
+              {
+                foreach (var timezone in Model.Timezones)
+                {
+                  <option value="@timezone.Id">@timezone.DisplayName</option>
+                }
+              }
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <button class="btn btn-primary" data-bind="click: vm.getTime">Get the time</button>
 
+      <div class="callout hidden" data-bind="css: { 'hidden': vm.hideResult }">
+        <h4>UTC Time</h4>
+        <p data-bind="text: vm.result.utcTime.text"></p>
+        <h4>Timezone</h4>
+        <p data-bind="text: vm.result.timezone"></p>
+        <h4>Time</h4>
+        <p data-bind="text: vm.result.time.text"></p>
+      </div>  
+    </div>
+  </div> 
+</div>
 
-<button type="submit" onclick="UserAction()">Get the time</button>
-
-<p id="output"></p>
+@section scripts
+{
+  @if (Model != null)
+  {
+    <script>
+      if (typeof (app) != 'undefined' &&
+          app instanceof WebApplication)
+        app.apiUrl = '@Model.ApiUrl'; 
+    </script> 
+  }
+}

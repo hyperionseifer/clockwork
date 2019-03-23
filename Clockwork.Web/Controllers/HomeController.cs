@@ -1,23 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Configuration;
 using System.Web.Mvc;
-using System.Web.Mvc.Ajax;
+using Clockwork.Web.ViewModels;
 
 namespace Clockwork.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+      private HomeViewModel GetViewModel()
+      {
+        var mvcName = typeof(Controller).Assembly.GetName();
+        var isMono = Type.GetType("Mono.Runtime") != null;
+
+        return new HomeViewModel()
         {
-            var mvcName = typeof(Controller).Assembly.GetName();
-            var isMono = Type.GetType("Mono.Runtime") != null;
+          Timezones = TimeZoneInfo.GetSystemTimeZones(),
+          ApiUrl = ConfigurationManager.AppSettings["APIUrl"],
+          Version = mvcName.Version.Major + "." + mvcName.Version.Minor,
+          Runtime = isMono ? "Mono" : ".NET"
+        };
+      }
 
-            ViewData["Version"] = mvcName.Version.Major + "." + mvcName.Version.Minor;
-            ViewData["Runtime"] = isMono ? "Mono" : ".NET";
-
-            return View();
-        }
+      public ActionResult Index()
+      {
+        var viewModel = GetViewModel();
+        return View(viewModel);
+      }
     }
 }
